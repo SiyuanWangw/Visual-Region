@@ -1,5 +1,9 @@
 # Activating Distributed Visual Region within LLMs for Efficient and Effective Vision-Language Training and Inference
 
+<p align="center">
+    <img src="img/intro.png" width="500" height="auto">
+</p>
+
 [**Activating Distributed Visual Region within LLMs for Efficient and Effective Vision-Language Training and Inference**](https://arxiv.org/abs/2412.12785) by
 [Siyuan Wang](https://siyuanwangw.github.io/), 
 [Dianyi Wang](https://github.com/AlenjandroWang), 
@@ -30,6 +34,7 @@ outside the visual region, which can achieve
 minimal performance loss. This study offers an
 effective and efficient strategy for LVLM training and inference by activating a layer-wise
 visual region within LLMs, which proves consistently effective across different models.
+
 
 ## Release
 
