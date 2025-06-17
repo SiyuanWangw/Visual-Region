@@ -6,7 +6,7 @@
 
 [**Activating Distributed Visual Region within LLMs for Efficient and Effective Vision-Language Training and Inference**](https://arxiv.org/abs/2412.12785) by
 [Siyuan Wang](https://siyuanwangw.github.io/), 
-[Dianyi Wang](https://github.com/AlenjandroWang), 
+[Dianyi Wang](https://scholar.google.com/citations?hl=zh-CN&user=iP2HPFEAAAAJ), 
 Chengxing Zhou,
 [Zejun Li](https://scholar.google.com/citations?user=FYppLbUAAAAJ&hl=zh-CN),
 [Zhihao Fan](https://libertfan.github.io/),
