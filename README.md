@@ -114,5 +114,32 @@ the "siglip-so400m-patch14-384" is for Bunny-Llama-3-8B-V and Bunny-Phi3-mini-4B
 | llava | vicuna-13b-v1.5 | [lmsys/vicuna-13b-v1.5](https://huggingface.co/lmsys/vicuna-13b-v1.5) |
 
 
-The training script for activating visual region stage with DeepSpeed ZeRO-3 can be found in ```scripts/train/finetune_all_moe.sh```. Global Batch Size is 128
+#### Activating visual region Finetuning
+we focus on the supervised fine-tuning stage using 695K and 665K language-image instruction-following instances for Bunny and LLaVA, and We have inherited the corresponding LVLM pre-training connector's checkpoints. Considering computational constraints, we use LoRA ,highlighting that our Activating visual region Finetuning is complementary to other efficient training methods.
 
+| MODEL_TYPE | Pretrained_CKPT             | Download Link                                                |
+| ---------- | --------------- | ------------------------------------------------------------ |
+| phi-3 | Bunny-Phi3-mini-4B-V | [bunny-pretrain-phi-3-siglip](https://huggingface.co/BoyaWu10/bunny-pretrain-phi-3-siglip) |
+| llama3-8b | Bunny-Llama-3-8B-V | [bunny-pretrain-llama3-8b-siglip](https://huggingface.co/BoyaWu10/bunny-pretrain-llama3-8b-siglip) |
+| llava | llava-7b-v1.5 | [llava-v1.5-mlp2x-336px-pretrain-vicuna-7b-v1.5](https://huggingface.co/liuhaotian/llava-v1.5-mlp2x-336px-pretrain-vicuna-7b-v1.5) |
+| llava | llava-13b-v1.5 | [llava-v1.5-mlp2x-336px-pretrain-vicuna-13b-v1.5](https://huggingface.co/liuhaotian/llava-v1.5-mlp2x-336px-pretrain-vicuna-13b-v1.5) |
+
+The training script for activating visual region stage with DeepSpeed ZeRO-3 can be found in ```scripts/train/finetune_visual_region.sh```. Global Batch Size is 128
+we utilize peft lora, the lora_r is 128 and lora_alpha is 256.
+
+* Run
+
+  Update `--model_name_or_path` and `--vision_tower` to the paths of the base_llm_model and vision encoder, respectively. Update `MODEL_TYPE`, `PRETRAIN_DIR`(to ref Pretrained_CKPT) and `OUTPUT_DIR` accordingly.
+
+For the --layer_selection, you can choose the layers corresponding to the visual area for training. In our experiments, we selected eight layers for Bunny-Llama-3-8B-V, Bunny-Phi3-mini-4B-V, and LLaVA-1.5-7B, while for LLaVA-1.5-13B, we selected nine layers. Additionally, the Sparse & Uniform selection method yields the best results. For more details, please refer to the paper for further adjustments to the training layers.
+
+
+
+## Evaluation
+
+see [evaluation_full.md](script/eval/full/evaluation.md).
+
+
+## Acknowledgement
+- [LLaVA](https://github.com/haotian-liu/LLaVA): the dataset we utilized.
+- [Bunny](https://github.com/BAAI-DCAI/Bunny): the codebase we built upon and the dataset we utilized.
