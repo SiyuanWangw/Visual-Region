@@ -50,6 +50,7 @@ class ModelArguments:
     use_s2: bool = field(default=False)
     pretrain_mm_mlp_adapter: Optional[str] = field(default=None)
     mm_projector_type: Optional[str] = field(default='mlp2x_gelu')
+    layer_selection:Optional[str] =field(default="1,5,9,13,19,23,27,31")
 
 
 @dataclass
@@ -143,11 +144,11 @@ def get_mm_adapter_state_maybe_zero_3(named_params, keys_to_match):
     return to_return
 
 
-def find_all_linear_names(model):
+def find_all_linear_names(model,model_args):
     cls = torch.nn.Linear
     lora_module_names = set()
     multimodal_keywords = ['mm_projector', 'vision_tower', 'vision_resampler']
-    layer_selection =['1','5','9','13','19','23','27','31']
+    layer_selection =model_args.layer_selection.split(',')
     for name, module in model.named_modules():
         if any(mm_keyword in name for mm_keyword in multimodal_keywords):
             continue
@@ -384,7 +385,7 @@ def train():
         lora_config = LoraConfig(
             r=training_args.lora_r,
             lora_alpha=training_args.lora_alpha,
-            target_modules=find_all_linear_names(model),
+            target_modules=find_all_linear_names(model,model_args),
             lora_dropout=training_args.lora_dropout,
             bias=training_args.lora_bias,
             task_type="CAUSAL_LM",
@@ -513,3 +514,4 @@ def train():
 
 if __name__ == "__main__":
     train()
+    
