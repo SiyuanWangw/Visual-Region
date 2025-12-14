@@ -153,18 +153,4 @@ CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/mmvet.sh
 
 The response file can be found in `eval/mm-vet/answers_upload`. You can submit the `json` response file to [submission link](https://huggingface.co/spaces/whyu/MM-Vet_Evaluator) to obtain the evaluation scores.
 
-## More Benchmarks
-Below more benchmarks implement it by referring to Cambrian’s evaluation script. include AI2D, Chartqa, DocVQA, HallusionBench
-## Usage
 
-To run evaluations, use the [`eval.sh`](scripts/eval.sh) script in the [`scripts/`](scripts/) directory. Here's the basic usage:
-
-```bash
-bash scripts/eval.sh --benchmark <benchmark_name> --ckpt <path_to_checkpoint> --conv_mode <conversation_mode> --model_type <model_type>
-```
-For example:
-
-```bash
-bash scripts/eval.sh --benchmark ai2d --ckpt /path/to/checkpoint --conv_mode phi3 --model_type mms-phi-3-moe
-```
-Specificly the benchmark Mathvista please refer [VlmEvalKit](https://github.com/open-compass/VLMEvalKit)
