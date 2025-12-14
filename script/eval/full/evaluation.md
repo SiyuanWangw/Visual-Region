@@ -8,7 +8,7 @@
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/mme.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/mme.sh
 ```
 
 The responses and scores can be found in `eval/mme/answers_upload`.
@@ -20,7 +20,7 @@ The responses and scores can be found in `eval/mme/answers_upload`.
 2. Update `SPLIT`, `LANG (en/cn)`, `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/mmbench.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/mmbench.sh
 ```
 
 The response file can be found in `eval/mmbench/answers_upload`. You can submit the Excel file to [submission link](https://mmbench.opencompass.org.cn/mmbench-submission) to obtain the evaluation scores.
@@ -45,7 +45,7 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/v1_5/eval/textvqa.sh
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/full/seedbench.sh
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/lora/seedbench.sh
 ```
 
 The response file can be found in `eval/seed-bench/answers_upload` and the scores can be found in `eval/seed-bench/scores`.
@@ -56,7 +56,7 @@ The response file can be found in `eval/seed-bench/answers_upload` and the score
 2. Update `SPLIT`, `MODEL_TYPE` and `TARGET_DIR` accordingly. You may add `--small-gpu-usage` to avoid `CUDA out of memory`.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/mmmu.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/mmmu.sh
 ```
 
 The response file can be found in `eval/mmmu/answers_upload`.
@@ -76,7 +76,7 @@ For test set, you can submit the `json` response file to [submission_link](https
 2. Update `SPLIT`, `MODEL_TYPE` and `TARGET_DIR` accordingly. You may add `--small-gpu-usage` to avoid `CUDA out of memory`.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/cmmmu.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/cmmmu.sh
 ```
 
 The response file can be found in `eval/cmmmu/answers_upload`.
@@ -101,7 +101,7 @@ For test set, you can submit the `jsonl` response file to [submission_link](http
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```Shell
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/full/vqav2.sh
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/lora/vqav2.sh
 ```
 
 The response file can be found in `eval/vqav2/answers_upload`. You can submit the `json` response file to [submission link](https://eval.ai/web/challenges/challenge-page/830) (Test-Dev Phase) to obtain the evaluation scores.
@@ -117,7 +117,7 @@ The response file can be found in `eval/vqav2/answers_upload`. You can submit th
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```Shell
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/full/gqa.sh
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/lora/gqa.sh
 ```
 
 ## ScienceQA-IMG
@@ -126,7 +126,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash script/eval/full/gqa.sh
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/scienceqa.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/scienceqa.sh
 ```
 
 The responses and the scores can be found in `eval/scienceqa/results`.
@@ -137,7 +137,7 @@ The responses and the scores can be found in `eval/scienceqa/results`.
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```Shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/pope.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/pope.sh
 ```
 
 We report the averaged F1-score of three categories (random, popular and adversarial).
@@ -148,7 +148,7 @@ We report the averaged F1-score of three categories (random, popular and adversa
 2. Update `MODEL_TYPE` and `TARGET_DIR` accordingly.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 sh script/eval/full/mmvet.sh
+CUDA_VISIBLE_DEVICES=0 sh script/eval/lora/mmvet.sh
 ```
 
 The response file can be found in `eval/mm-vet/answers_upload`. You can submit the `json` response file to [submission link](https://huggingface.co/spaces/whyu/MM-Vet_Evaluator) to obtain the evaluation scores.
