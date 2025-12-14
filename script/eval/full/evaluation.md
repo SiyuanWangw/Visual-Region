@@ -1,6 +1,6 @@
-# Evaluation for full-parameter tuning models
+# Evaluation for tuning models
 
-**Note that change `conv-mode` to `phi3/llama` for `MODEL_TYPE = mms-phi-3-moe(MoIIE)/phi-3-moe(Vanilla MoE)/m-phi-3(Modality MoE)/phi-3(Dense)` and llama series.**
+**Note that change `conv-mode` to `phi3/llama/vicuna_V1` for `MODEL_TYPE =phi-3/llama3-8b/llava`.**
 
 ## MME
 
