@@ -1,0 +1,130 @@
+import argparse
+import torch
+import os
+import json
+from tqdm import tqdm
+import shortuuid
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import random
+from bunny.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN
+from bunny.conversation import conv_templates
+from bunny.conversation import conv_templates, SeparatorStyle
+from bunny.model.builder import load_pretrained_model
+from bunny.util.utils import disable_torch_init
+from bunny.util.mm_utils import tokenizer_image_token, process_images, get_model_name_from_path
+from bunny.util.mm_utils import load_image_from_base64
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+from PIL import Image
+import math
+def set_seed(seed=234):
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+
+def l2_distance(tensor1, tensor2):
+    return torch.norm(tensor1 - tensor2, p=2).item()
+
+def angular_distance(tensor1, tensor2):
+    """
+    计算两个层表示之间的角度距离。
+    
+    Args:
+        tensor1 (torch.Tensor): 第一个层的参数或表示向量。
+        tensor2 (torch.Tensor): 第二个层的参数或表示向量。
+
+    Returns:
+        float: 两个向量之间的角度距离，范围在 [0, 1]。
+    """
+    # 计算内积
+    
+    device = 'cuda' 
+    
+    tensor1 = tensor1.to(device)
+    tensor2 = tensor2.to(device)
+    dot_product = torch.sum(tensor1 * tensor2)
+    
+    # 计算两个向量的范数
+    norm1 = torch.norm(tensor1)
+    norm2 = torch.norm(tensor2)
+    # 计算余弦相似度
+    cos_similarity = dot_product / (norm1 * norm2 + 1e-8)  # 加1e-8避免分母为0
+    
+    # 计算角度距离
+    angular_dist = (1 / torch.pi) * torch.arccos(torch.clamp(cos_similarity, -1.0, 1.0))
+    
+    return angular_dist.item()
+
+def parameter_change_rate(tensor1, tensor2):
+    """
+    计算两个张量的参数变化率，即 ||W' - W|| / ||W||。
+    """
+    tensor1 = tensor1.to("cuda")
+    tensor2 = tensor2.to("cuda")
+    return torch.norm(tensor1 - tensor2, p=2).item() / (torch.norm(tensor1, p=2).item() + 1e-8)
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-path", type=str, default=None)
+    parser.add_argument("--model-path-llm", type=str, default=None)
+    parser.add_argument("--model-base", type=str, default=None)
+    parser.add_argument("--model-type", type=str, default=None)
+    parser.add_argument("--conv-mode", type=str, default=None)
+    parser.add_argument("--num-chunks", type=int, default=1)
+    parser.add_argument("--chunk-idx", type=int, default=0)
+    parser.add_argument("--temperature", type=float, default=0.2)
+    parser.add_argument("--top_p", type=float, default=None)
+    parser.add_argument("--num_beams", type=int, default=1)
+    parser.add_argument("--max_new_tokens", type=int, default=128)
+    parser.add_argument("--single-pred-prompt", action="store_true")
+    parser.add_argument("--all-rounds", action="store_true")
+    parser.add_argument("--lang", type=str, default="en")
+    parser.add_argument("--cal_type", type=str, default="l2_distance")
+    args = parser.parse_args()
+    # torch.distributed.init_process_group(
+    #     backend='nccl',
+    #     world_size=int(os.getenv('WORLD_SIZE', '1')),
+    #     rank=int(os.getenv('RANK', '0')),
+    # )
+    # torch.cuda.set_device(int(os.getenv('LOCAL_RANK', 0)))
+    # set_seed(seed=234)
+    # cls = torch.nn.Linear
+    # disable_torch_init()
+    model_path = os.path.expanduser(args.model_path)
+    model_name = get_model_name_from_path(model_path)
+    model_path_llm = os.path.expanduser(args.model_path_llm)
+    model_name_llm = get_model_name_from_path(model_path_llm)
+    tokenizer, model, image_processor, context_len = load_pretrained_model(model_path, None ,model_name,
+                                                                           args.model_type)
+    
+    tokenizer_llm, model_llm, image_processor_llm, context_len = load_pretrained_model(model_path_llm, args.model_base, model_name_llm,
+                                                                           args.model_type)
+    list = []
+    enable = ["v_proj","k_proj","q_proj","o_proj","gate_proj","up_proj","down_proj"]
+    for i in range(32):
+        ans = 0
+        for n , p in model.model.layers.named_parameters():
+            for e in enable:
+                if e.lower() in n.lower() and n.split('.')[0]==str(i):
+                    for n_llm ,p_llm in model_llm.model.layers.named_parameters():
+                        if n == n_llm:
+                            print(n,p)
+                            if args.cal_type=="l2_distance":
+                                ans += l2_distance(p,p_llm) 
+                            elif:args.cal_type=="angular_distance":
+                                ans += angular_distance(p,p_llm) 
+                            elif:args.cal_type=="l1_distance":
+                                ans += parameter_change_rate(p,p_llm) 
+
+        
+        list.append(ans)
+    
+    sorted_indices = sorted(range(len(list)), key=lambda i: list[i], reverse=True)
+    print(sorted_indices)
+    print(list)
+                        
